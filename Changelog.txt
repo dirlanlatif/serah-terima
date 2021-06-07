@@ -1,0 +1,14 @@
+penambahan tab data hh
+
+Untuk program rekap stok cadanganan yang belum
+update stok 				OK
+view histori stok keluar	OK
+view histori stok masuk		OK
+
+
+tbl_stok
+tombol update stok menambah transaksi di tbl_stok
+insert into tbl_stok
+
+tbl_pakai_stok
+untuk stok terpakai
