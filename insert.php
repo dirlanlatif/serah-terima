@@ -1,9 +1,9 @@
 <?php
-
+error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 include('config.php');
 include('function.php');
 session_start();
-if(isset($_POST["operation"]))
+if(isset($_POST["operation"]) OR isset($_POST["operationsegel"]) OR isset($_POST["operationrestart"]))
 {
 	//--------------------------Pinjam Handheld------------------------------//
 	if($_POST["operation"] == "Add")
@@ -288,13 +288,94 @@ if(isset($_POST["operation"]))
 		}
 	}
 	/**
+	 * Regist Segel
+	 */
+	// if($_POST["operationsegel"] == "segel")
+	if($_POST["operationsegel"] == "segel")
+	
+	{
+		$statement = $connection->prepare("
+			INSERT INTO tbl_segel (kdtk, nosegel, tgl_input) 
+			VALUES (:kdtk, :nosegel, :tgl_input)
+		");
+		$result2 = $statement->execute(
+			array(
+				':kdtk'		=>	$_POST["kdtk"],
+				':nosegel'	=>	$_POST["nosegel"],
+				':tgl_input'=>	date('Y-m-d H:i:s')
+			)
+		);
+		if(!empty($result2))
+		{
+			echo 'Berhasil ', $_POST["kdtk"], " Nomor: " , $_POST["nosegel"];
+		}else{
+			/**
+			 * jika kode/sn/aktiva ada, gagal terinput, tabel di db menggunakan indeks unik
+			 */
+			echo "Cek Data inputan";
+		}
+	}
+	/**
+	 * Rekap Restart
+	 */
+	// if($_POST["operationsegel"] == "segel")
+	if($_POST["operationrestart"] == "restart")
+	
+	{
+		$statement = $connection->prepare("
+			INSERT INTO tbl_restart (zona, norestart, tgl_input) 
+			VALUES (:zona, :norestart, :tgl_input)
+		");
+		$result2 = $statement->execute(
+			array(
+				':zona'			=>	$_POST["zona"],
+				':norestart'	=>	$_POST["norestart"],
+				':tgl_input'	=>	date('Y-m-d H:i:s')
+			)
+		);
+		if(empty($result2))
+		{
+			echo "Cek Data inputan";
+			//echo 'Berhasil ', $_POST["kdtk"], " Nomor: " , $_POST["nosegel"];
+		} 	echo "OK";
+	}
+	/**
+	 * Toko Baru
+	 */
+	if($_POST["operationsegel"] == "tobar")
+	
+	{
+		$statement = $connection->prepare("
+			INSERT INTO tbl_toko (kdtk, nmtk) 
+			SELECT * FROM (SELECT :kdtk, :nmtk) AS tmp
+			WHERE NOT EXISTS (
+				SELECT kdtk FROM tbl_toko WHERE kdtk = ':kdtk'
+			) LIMIT 1;
+		");
+		$result2 = $statement->execute(
+			array(
+				':kdtk'		=>	strtoupper($_POST["kdtkbaru"]),
+				':nmtk'		=>	strtoupper($_POST["nmtkbaru"])
+			)
+		);
+		if(!empty($result2))
+		{
+			echo 'Berhasil ', $_POST["kdtkbaru"], " - " , $_POST["nmtkbaru"];
+		}else{
+			/**
+			 * jika kode/sn/aktiva ada, gagal terinput, tabel di db menggunakan indeks unik
+			 */
+			echo "Cek Data inputan";
+		}
+	}
+	/**
 	 * Tambah data karyawan baru
 	 */
 	if($_POST["operation"] == "isidatakar")
 	{
 		$statement = $connection->prepare("
-			INSERT INTO tbl_support (nik, nama_lengkap, username, password, no_hp, email, akses) 
-			VALUES (:nik, :nama, :username, :password, :hp, :email, :akses)
+			INSERT INTO tbl_support (nik, nama_lengkap, username, password, no_hp, email, akses, digunakan) 
+			VALUES (:nik, :nama, :username, :password, :hp, :email, :akses, :now)
 		");
 		$result1 = $statement->execute(
 			array(
@@ -304,7 +385,8 @@ if(isset($_POST["operation"]))
 				':password' =>	$_POST["password7"],
 				':hp'       =>	$_POST["hp7"],
 				':email'    =>	$_POST["email7"],
-				':akses'    =>	$_POST["bagian7"]
+				':akses'    =>	$_POST["bagian7"],
+				'now'		=>	date('Y-m-d H:i:s')
 			)
 		);
 		if(!empty($result1))
@@ -430,14 +512,64 @@ if(isset($_POST["operation"]))
 		}
 	}
 	/**
+	 * Input data pemakaian
+	 *
+	 */
+	if($_POST["operation"] == "tambahmenu")
+	{
+		$lengkap = $_POST["domain"] ."/". $_POST["pathname"];
+		$statement = $connection->prepare("
+			INSERT INTO tbl_menu (domain, pathname, untukapa, lengkap)
+			VALUES (:domain, :pathname, :untukapa, :lengkap)
+		");
+		$result = $statement->execute(
+			array(
+				//':nik'      =>	$_POST["nik7"],
+				':domain'	=>	$_POST["domain"],
+				':pathname'	=>	$_POST["pathname"],
+				':untukapa'	=>	$_POST["untukapa"],
+				':lengkap'	=>	$lengkap
+			)
+		);
+		if(!empty($result))
+		{
+			echo 'Alamat ', $_POST["untukapa"] , "\n" ,'tersimpan';
+		}else{
+			echo "Terdapat Kesalahan", "\n" , "Cek data anda";
+			// var_dump($lengkap);
+		}
+	}
+	if($_POST["operation"] == "Editmenu")
+	{
+		$lengkap = $_POST["domain"] ."/". $_POST["pathname"];
+		$statement = $connection->prepare("UPDATE tbl_menu 
+			SET domain= :domain, pathname = :pathname, untukapa = :untukapa, lengkap = :lengkap
+			WHERE id = :id
+		");
+		$result = $statement->execute(
+			array(
+				':id'		=>	$_POST["id_menu"],
+				':domain'	=>	$_POST["domain"],
+				':pathname'	=>	$_POST["pathname"],
+				':untukapa'	=>	$_POST["untukapa"],
+				':lengkap'	=>	$lengkap
+			)
+		);
+		if(!empty($result))
+		{
+			echo 'Update Berhasil';
+		}
+	}
+	
+	/**
 	 * Input data pemakaian BTLR
 	 *
 	 */
 	if($_POST["operation"] == "btlr")
 	{
 		$statement = $connection->prepare("
-			INSERT INTO tbl_btlr (item, qty, nik, nama, zona, waktu)
-			VALUES (:item, :qty, :nik, :nama, :zona, :waktu)
+			INSERT INTO tbl_btlr (item, qty, nik, nama, zona, waktu, keterangan)
+			VALUES (:item, :qty, :nik, :nama, :zona, :waktu, :keterangan)
 		");
 		$result = $statement->execute(
 			array(
@@ -446,7 +578,8 @@ if(isset($_POST["operation"]))
 				':nik'  =>	$_POST["nik"],
 				':nama' =>	$_POST["nama"],
 				':zona' =>	$_POST["zona"],				
-				':waktu'=>	date('Y-m-d H:i:s')
+				':waktu'=>	date('Y-m-d H:i:s'),
+				':keterangan'=>	$_POST["keteranganbtlr"]
 			)
 		);
 		if(!empty($result))
@@ -506,4 +639,5 @@ if(isset($_POST["operation"]))
 		}
 	}
 }
+// var_dump($_POST["xaction"]);
 ?>

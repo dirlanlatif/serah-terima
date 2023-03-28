@@ -10,7 +10,7 @@ echo $_SERVER["HTTP_HOST"],$_RESULT,$end;
 if(!isset($_SESSION)) {
 	session_start();
 	}
-$inactive = 2000;
+$inactive = 1000;
 if( !isset($_SESSION['timeout']) )
 $_SESSION['timeout'] = time() + $inactive;
 $session_life = time() - $_SESSION['timeout'];
@@ -21,6 +21,7 @@ error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 ?>
 <html>
 	<head>
+
 		<meta http-equiv="refresh" content="2500">
 		<meta charset="UTF-8">
 		<meta name="description" content="Serah Terima">
@@ -45,10 +46,37 @@ error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 		<link href="assets/datepicker-1.6.4/css/bootstrap-datepicker3.css" rel="stylesheet">
 		<link href="assets/css/jquery-ui.min.css" rel="stylesheet">
 	</head>
+
+	<style type="text/css">
+		body {
+			/*background-color: black;*/
+		}
+		ul {
+			/*background-color: black;*/
+		}
+		.nav-tabs > li.active > a {
+			background-color: #000099;
+			color: white;
+			border: 2px solid red;
+			border-radius: 8px;
+		  	/*padding: 5px;*/
+
+		}
+		a {
+			/*color: red;*/
+		}
+		#txt> {
+			/*color: black;*/
+		}
+	</style>
 	<body onload="startTime()">
 		<div class="container-fluid">
-			<?php date_default_timezone_set("Asia/Kuala_Lumpur");?>
-			<div class="hidden-md">
+			<?php date_default_timezone_set("Asia/Kuala_Lumpur");
+			$harii = date("d"); //untuk tanggal rekap restart
+			$bulann = date("F"); //untuk tanggal rekap restart
+			$tahunn = date("Y"); //untuk tanggal rekap restart
+			?>
+			<!-- <div class="hidden-md">
 				<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 					<div class="container-fluid">
 						<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -60,6 +88,7 @@ error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 										<?php
 										date_default_timezone_set("Asia/Makassar");
 										$tanggal = mktime(date('m'), date("d"), date('Y'));
+										
 										//echo date("d-m-Y", $tanggal );
 										$jam = date ("H:i");
 										echo "<b id='txt'> </b>";
@@ -98,48 +127,109 @@ error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 						</div>
 					</div>
 				</nav>
-			</div>
+			</div> -->
 			<!-- ===================================TAB MENU=================================== -->
+			<header>
+			<div class="navbar-inner">
+	          <button type="button" class="navbar-toggle btn btn-xs btn-warning" data-toggle="collapse" data-target=".navbar-collapse" style="z-index: 9998; margin-top: 1px; color: #337ab7">Menu</button>
+	        </div>
+			<nav class="navbar navbar-default navbar-fixed-top navbar-collapse collapse" role="navigation">
+			<!-- <nav class="navbar navbar-fixed-top"> -->
 			
-			<ul class="nav nav-tabs" role="tablist" id="myTab" style="padding-top: 43px">
-				<li class="active">
-					<a href="#handheld" role="tab" data-toggle="tab" accesskey="1">Handheld</a>
-				</li>
-				<li>
-					<a href="#handytalky" role="tab" data-toggle="tab" accesskey="2">Handytalky</a>
-				</li>
-				<li>
-					<a href="#historyhh" role="tab" data-toggle="tab" accesskey="3">History Handheld</a>
-				</li>
-				<li>
-					<a href="#historyht" role="tab" data-toggle="tab" accesskey="4">History Handytalky</a>
-				</li>
-				<?php if($_SESSION['userakses']=="support" or $_SESSION['userakses']=="administrator web"): ?>
-				<li>
-					<a href="#datahh" role="tab" data-toggle="tab" accesskey="5">Data HH</a>
-				</li>
-				<li>
-					<a href="#dataht" role="tab" data-toggle="tab" accesskey="6">Data HT</a>
-				</li>
-				<li>
-					<a href="#dk" role="tab" data-toggle="tab" accesskey="7">Karyawan DC</a>
-				</li>
-				<!-- <li>
-						<a href="#sc" role="tab" data-toggle="tab" accesskey="8">Stok Cadangan</a>
-				</li> -->
-				<?php else: ?>
-				<?php endif; ?>
-				<!-- <li>
-						<a href="#hs" role="tab" data-toggle="tab" accesskey="9">History Stok</a>
-				</li> -->
-				
-				<li>
-					<a href="#rp" role="tab" data-toggle="tab" accesskey="0">BTLR</a>
-				</li>
-				
-			</ul>
+				<ul class="nav nav-tabs" role="tablist" id="myTab" style="padding-top: 0px;">
+					<li class="active">
+						<a href="#handheld" role="tab" data-toggle="tab" accesskey="1">HH</a>
+					</li>
+					<li>
+						<a href="#handytalky" role="tab" data-toggle="tab" accesskey="2">HT</a>
+					</li>
+					<li>
+						<a href="#rp" role="tab" data-toggle="tab" accesskey="0">BTLR</a>
+					</li>
+					<li>
+						<a href="#historyhh" role="tab" data-toggle="tab" accesskey="3">Hist. Handheld</a>
+					</li>
+					<li>
+						<a href="#historyht" role="tab" data-toggle="tab" accesskey="4">Hist. Handytalky</a>
+					</li>
+					
+					<?php if($_SESSION['userakses']=="support" or $_SESSION['userakses']=="administrator web"): ?>
+					<li>
+						<a href="#datahh" role="tab" data-toggle="tab" accesskey="5">Data HH</a>
+					</li>
+					<li>
+						<a href="#dataht" role="tab" data-toggle="tab" accesskey="6">Data HT</a>
+					</li>
+					<li>
+						<a href="#dk" role="tab" data-toggle="tab" accesskey="7">Karyawan DC</a>
+					</li>
+					<!-- <li>
+							<a href="#sc" role="tab" data-toggle="tab" accesskey="8">Stok Cadangan</a>
+					</li> -->
+					<?php else: ?>
+					<li>
+						<a href="#datahhn" role="tab" data-toggle="tab" accesskey="5">Data HH</a>
+					</li>
+					<?php endif; ?>
+					<!-- <li>
+							<a href="#hs" role="tab" data-toggle="tab" accesskey="9">History Stok</a>
+					</li> -->
+					
+					<li>
+						<a href="#segel" role="tab" data-toggle="tab" accesskey="s">SEGEL</a>
+					</li>
+					<li>
+						<a href="#restart" role="tab" data-toggle="tab" accesskey="s">RESTART</a>
+					</li>
+					<li>
+						<a href="#akses" role="tab" data-toggle="tab" accesskey="a">AKSES</a>
+					</li>
+					<li style="float: right;">
+						<?php if($_SESSION['userakses']=="support" or $_SESSION['userakses']=="administrator web"): ?>
+							<a href="logout.php">
+								<button class="btn btn-xs btn-danger" accesskey="g">LO<u>G</u> OUT</button>
+							</a>
+						<?php else: ?>
+							<a href="#" data-toggle="modal" data-target="#id001">
+								<button class="btn btn-xs btn-primary" accesskey="l" data-toggle="tooltip" title="LOGIN">
+									<i class="bi-lock"> </i><u>L</u>OGIN
+								</button>
+							</a>
+						<?php endif; ?>
+					</li>
+					<li style="float: right;">
+						<a>
+							<i>
+							<b style='color: rgb(51, 122, 183)'>
+							<?php
+							date_default_timezone_set("Asia/Makassar");
+							$tanggal = mktime(date('m'), date("d"), date('Y'));
+							//echo date("d-m-Y", $tanggal );
+							$jam = date ("H:i");
+							echo "<b id='txt'> </b>";
+							$a = date ("H");
+							if (($a>=4) && ($a<=11)) {
+							echo ", Selamat Pagi ".$_SESSION['userweb'];
+							}else if(($a>=12) && ($a<=15)){
+							echo ", Selamat  Siang ".$_SESSION['userweb'];
+							}else if(($a>=16) && ($a<=18)){
+							echo ", Selamat Sore ".$_SESSION['userweb'];
+							}else if(($a>=19) && ($a<24)){
+							echo ", Selamat Malam ".$_SESSION['userweb'];
+							}else{
+							echo ", Dini Hari ".$_SESSION['userweb'];
+							}?>
+							</b>
+							</i>
+						</a>
+					</li>
+				</ul>
+			</nav>
+			</header>
 			<!-- =================================ISI TAB MENU================================== -->
-			<div class="tab-content">
+			<div>
+			<div class="tab-content" style="margin-top:50px">
+				
 				<!-- =========================TAB MENU HANDHELD========================= -->
 				<div class="tab-pane active" id="handheld">
 					<?php include 'handheld.php'; ?>
@@ -159,6 +249,9 @@ error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 				<!-- =========================TAB MENU DATA HANDHELD========================= -->
 				<div class="tab-pane" id="datahh">
 					<?php include 'datahh.php'; ?>
+				</div>
+				<div class="tab-pane" id="datahhn">
+					<?php include 'datahhn.php'; ?>
 				</div>
 				<!-- =========================TAB MENU DATA HANDY TALKY========================= -->
 				<div class="tab-pane" id="dataht">
@@ -180,6 +273,19 @@ error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 				<div class="tab-pane" id="rp">
 					<?php include 'btlr.php'; ?>
 				</div>
+				<!-- =========================TAB MENU SEGEL========================= -->
+				<div class="tab-pane" id="segel">
+					<?php include 'segel.php'; ?>
+				</div>
+				<!-- =========================TAB MENU RESTART========================= -->
+				<div class="tab-pane" id="restart">
+					<?php include 'restart.php'; ?>
+				</div>
+				<!-- =========================TAB MENU AKSES========================= -->
+				<div class="tab-pane" id="akses">
+					<?php include 'akses.php'; ?>
+				</div>
+			</div>
 			</div>
 		</div>
 		<!-- =================================MODAL PINJAM HANDHELD================================== -->
@@ -189,19 +295,21 @@ error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
-							<h4 class="modal-title"></h4>
+							<h4 class="modal-title" style="text-align: center;"></h4>
 						</div>
 						<div class="modal-body">
+
+							<img src="" width="250" height="auto" id="gambar" style="display: block;margin-left: auto;margin-right: auto; border: 2px solid black">
 							
-							<label>NIK</label>
+							<label class="ket">NIK</label>
 							<input type="text" name="nik" id="nik" class="typeahead form-control" required maxlength="10" autosave="off"  onkeypress="return angka(event)"/>
-							<label>Nama</label>
+							<label class="ket">Nama</label>
 							<input type="text" name="hnama" id="hnama" class="nama form-control" style="text-transform:uppercase;" disabled required/>
 							<input type="hidden" name="nama" id="nama" class="form-control" style="text-transform:uppercase;" required />
-							<label>IP Device</label>
+							<label class="ket">IP Device</label>
 							<input type="text" name="ip" id="ip" class="typeahead form-control" autocomplete="off" required />
 							<input type="hidden" name="hip" id="hip" class="form-control" />
-							<label>Bagian</label>
+							<label class="ket">Bagian</label>
 							<select name="bagian" id="bagian" class="form-control" required>
 								<option value="">--Select--</option>
 								<option value="receiving">Receiving</option>
@@ -220,8 +328,8 @@ error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 								Pinjam
 								</button>
 								<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-								<input type="hidden" name="hh_id" id="hh_id" />
 								<input type="hidden" name="jenis" id="jenis" />
+								<input type="hidden" name="hh_id" id="hh_id" />
 								<input type="hidden" name="operation" id="operation" />
 							</div>
 						</div>
@@ -306,14 +414,15 @@ error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 							<label>Type*</label>
 							<select name="type" id="type" class="form-control type" required>
 								<option value="">--Select--</option>
-								<option value="MC3090 SERIES">MC3090 SERIES</option>
-								<option value="MC3190 SERIES">MC3190 SERIES</option>
-								<option value="MC32N0 SERIES">MC32N0 SERIES</option>
-								<option value="MC3090 GUN">MC3090 GUN</option>
-								<option value="MC3190 GUN">MC3190 GUN</option>
-								<option value="MC32N0 GUN">MC32N0 GUN</option>
+								<?php 
+												$query=mysqli_query($konek,"SELECT * FROM tbl_type WHERE untuk2 = 'Handheld' ORDER BY type1 ASC");
+													while($dirlan=mysqli_fetch_array($query))
+														{;?>
+													<?php
+														echo "<option value='$dirlan[type1]'>$dirlan[type1]</option>";
+													}?>
 							</select>
-							<label>No Mesin</label>
+							<label id="lmesin">No Mesin</label>
 							<input type="text" name="no_mesin" id="no_mesin" class="typeahead form-control" autocomplete="off"  />
 							<label>SN*</label>
 							<input type="text" name="sn_hardware" id="sn_hardware" class="nama form-control" style="text-transform:uppercase;" required/>
@@ -322,13 +431,13 @@ error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 							<label>Keterangan</label>
 							<select name="keterangan" id="keterangan" class="form-control keterangan" required>
 								<option value="">-Select-</option>
-								<option value="Baik Aktif">Baik Aktif</option>
-								<option value="Service HO">Service</option>
-								<option value="Rusak Aktif">Rusak Aktif</option>
-								<option value="BAP Aktif">BAP Aktif</option>
-								<option value="Baik Cadangan">Baik Cadangan</option>
-								<option value="Rusak Tidak Aktif">Rusak Tidak Aktif</option>
-								<option value="BAP">BAP</option>
+								<?php 
+												$query=mysqli_query($konek,"SELECT * FROM tbl_type WHERE untuk2 = 'keterangan' ORDER BY type1 ASC");
+													while($dirlan=mysqli_fetch_array($query))
+														{;?>
+													<?php
+														echo "<option value='$dirlan[type1]'>$dirlan[type1]</option>";
+													}?>
 							</select>
 							<label>Bagian</label>
 							<select name="bagian2" id="bagian2" class="form-control bagian2" required>
@@ -374,9 +483,13 @@ error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 							<label>Type*</label>
 							<select name="type1" id="type1" class="form-control type1" required>
 								<option value="">--Select--</option>
-								<option value="ALINCO DJ-W35">ALINCO DJ-W35</option>
-								<option value="HYT TC-580">HYT TC-580</option>
-								<option value="Lainnya">Lainnya</option>
+								<?php 
+												$query=mysqli_query($konek,"SELECT * FROM tbl_type WHERE untuk2 = 'Handytalky' ORDER BY type1 ASC");
+													while($dirlan=mysqli_fetch_array($query))
+														{;?>
+													<?php
+														echo "<option value='$dirlan[type1]'>$dirlan[type1]</option>";
+													}?>
 							</select>
 							<label>SN*</label>
 							<input type="text" name="sn1" id="sn1" class="form-control" style="text-transform:uppercase;" required/>
@@ -385,13 +498,13 @@ error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 							<label>Keterangan</label>
 							<select name="keterangan1" id="keterangan1" class="form-control keterangan1" required>
 								<option value="">-Select-</option>
-								<option value="Baik Aktif">Baik Aktif</option>
-								<option value="Service">Service</option>
-								<option value="Rusak Aktif">Rusak Aktif</option>
-								<option value="BAP Aktif">BAP Aktif</option>
-								<option value="Baik Cadangan">Baik Cadangan</option>
-								<option value="Rusak Tidak Aktif">Rusak Tidak Aktif</option>
-								<option value="BAP">BAP</option>
+								<?php 
+												$query=mysqli_query($konek,"SELECT * FROM tbl_type WHERE untuk2 = 'keterangan' ORDER BY type1 ASC");
+													while($dirlan=mysqli_fetch_array($query))
+														{;?>
+													<?php
+														echo "<option value='$dirlan[type1]'>$dirlan[type1]</option>";
+													}?>
 							</select>
 							<label>Bagian</label>
 							<select name="bagian1" id="bagian1" class="form-control bagian1" required>
@@ -457,12 +570,21 @@ error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 										<label>Type*</label>
 										<select name="type5" id="type5" class="form-control type5" required>
 											<option value="">--Select--</option>
-											<option value="MC3090 SERIES">MC3090 SERIES</option>
+											<?php 
+												$query=mysqli_query($konek,"SELECT * FROM tbl_type WHERE untuk2 = 'Handheld' ORDER BY type1 ASC");
+													while($dirlan=mysqli_fetch_array($query))
+														{;?>
+													<?php
+														echo "<option value='$dirlan[type1]'>$dirlan[type1]</option>";
+													}?>
+																 ?>
+											<!-- <option value="MC3090 SERIES">MC3090 SERIES</option>
 											<option value="MC3190 SERIES">MC3190 SERIES</option>
 											<option value="MC32N0 SERIES">MC32N0 SERIES</option>
 											<option value="MC3090 GUN">MC3090 GUN</option>
 											<option value="MC3190 GUN">MC3190 GUN</option>
 											<option value="MC32N0 GUN">MC32N0 GUN</option>
+											<option value="MC330">MC330</option> -->
 										</select>
 									</td>
 								</tr>
@@ -499,13 +621,13 @@ error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 										<label>Keterangan</label>
 										<select name="keterangan5" id="keterangan5" class="form-control keterangan5" required>
 											<option value="">-Select-</option>
-											<option value="Baik Aktif">Baik Aktif</option>
-											<option value="Service">Service</option>
-											<option value="Rusak Aktif">Rusak Aktif</option>
-											<option value="BAP Aktif">BAP Aktif</option>
-											<option value="Baik Cadangan">Baik Cadangan</option>
-											<option value="Rusak Tidak Aktif">Rusak Tidak Aktif</option>
-											<option value="BAP">BAP</option>
+											<?php 
+												$query=mysqli_query($konek,"SELECT * FROM tbl_type WHERE untuk2 = 'keterangan' ORDER BY type1 ASC");
+													while($dirlan=mysqli_fetch_array($query))
+														{;?>
+													<?php
+														echo "<option value='$dirlan[type1]'>$dirlan[type1]</option>";
+													}?>
 										</select>
 									</td>
 								</tr>
@@ -547,9 +669,13 @@ error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 										<label>Type*</label>
 										<select name="type6" id="type6" class="form-control type6" required>
 											<option value="">--Select--</option>
-											<option value="ALINCO DJ-W35">ALINCO DJ-W35</option>
-											<option value="HYT TC-580">HYT TC-580</option>
-											<option value="Lainnya">Lainnya</option>
+											<?php 
+												$query=mysqli_query($konek,"SELECT * FROM tbl_type WHERE untuk2 = 'Handytalky' ORDER BY type1 ASC");
+													while($dirlan=mysqli_fetch_array($query))
+														{;?>
+													<?php
+														echo "<option value='$dirlan[type1]'>$dirlan[type1]</option>";
+													}?>
 										</select>
 									</td>
 								</tr>
@@ -600,13 +726,13 @@ error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 										<label>Keterangan</label>
 										<select name="keterangan6" id="keterangan6" class="form-control keterangan6" required>
 											<option value="">-Select-</option>
-											<option value="Baik Aktif">Baik Aktif</option>
-											<option value="Service">Service</option>
-											<option value="Rusak Aktif">Rusak Aktif</option>
-											<option value="BAP Aktif">BAP Aktif</option>
-											<option value="Baik Cadangan">Baik Cadangan</option>
-											<option value="Rusak Tidak Aktif">Rusak Tidak Aktif</option>
-											<option value="BAP">BAP</option>
+											<?php 
+												$query=mysqli_query($konek,"SELECT * FROM tbl_type WHERE untuk2 = 'keterangan' ORDER BY type1 ASC");
+													while($dirlan=mysqli_fetch_array($query))
+														{;?>
+													<?php
+														echo "<option value='$dirlan[type1]'>$dirlan[type1]</option>";
+													}?>
 										</select>
 									</td>
 								</tr>
@@ -779,18 +905,67 @@ error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 				</form>
 			</div>
 		</div>
+		<!-- ============================MODAL MENU AKSES============================ -->
+		<div id="menu-Modal" class="modal fade bs-example-modal-sm">
+			<div class="modal-dialog modal-dialog modal-sm">
+				<form method="post" id="menu_form" enctype="multipart/form-data" autocomplete="off">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title" align="center" style="font-weight: bold;"></h4>
+						</div>
+						<div class="modal-body">
+							<table style="width: ;"align="center">
+								<tr>
+									<td>
+										<label id="qtylabel">Peruntukan</label>
+										<input type="text" name="untukapa" id="untukapa" class="form-control"/>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<label>IP Domain/Alamat Domain</label>
+										<input type="text" name="domain" id="domain" class="form-control" autosave="off" autofocus/>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<label id="qtylabel">Path Halaman</label>
+										<input type="text" name="pathname" id="pathname" class="form-control"/>
+									</td>
+								</tr>
+							</table>
+						</div>
+						<div class="modal-footer">
+							<div class="col-sm-11" style="padding-right: 40px">
+								<br>
+								<input type="submit" name="action" id="actionmenu" class="btn btn-success" value="Simpan" onclick="return confirm('Data inputan sudah benar?');" />
+								<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+								<input type="text" name="operation" id="operationmenu" 
+								/>
+								<input type="text" name="id_menu" id="id_menu" 
+								/>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
 		<!-- ============================MODAL BTLR============================ -->
 		<div id="btlr-Modal" class="modal fade bs-example-modal-sm">
-			<div class="modal-dialog modal-dialog modal-sm">
+			<div class="modal-dialog modal-dialog modal-xs">
 				<form method="post" id="btlr_form" enctype="multipart/form-data" autocomplete="off" class="c-btlr">
-					<div class="modal-content">
+					<div class="modal-content" style="position: absolute;right: 114px;left: 114px">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
 							<h4 class="modal-title"></h4>
 						</div>
 						<div class="modal-body">
+							<table style="">
+								<tr>
+									<td colspan="3">
 							<label>Item</label>
-							<select name="item9" id="item9" class="form-control selectpicker" data-live-search="true" data-size="5" required>
+							<select name="item9" id="item9" class="form-control selectpicker" data-live-search="true" data-size="5" required onclick="inputqty()">
 								<option data-tokens="" value="">--Select--</option>
 								<?php
 								$query=mysqli_query($konek,"SELECT * FROM v_btlr_stok ORDER BY item ASC");
@@ -801,13 +976,29 @@ error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 									echo "<option data-tokens='$dirlan[item]' value='$dirlan[item]' data-subtext='$dirlan[sisa]'>$dirlan[item]</option>";
 								}?>
 							</select>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="3">	
 							<label>Qty</label>
 							<input type="text" name="qty9" id="qty9" class="typeahead form-control" required maxlength="3" autosave="off"  onkeypress="return angka(event)" value="1" />
+									</td>
+								</tr>
+								<tr>
+									<td>
 							<label>NIK</label>
-							<input type="text" name="nik" id="nik" class="typeahead form-control" required maxlength="10" autosave="off"  onkeypress="return angka(event)"/>
+							<input type="text" name="nik" id="nik" class="typeahead form-control" required maxlength="10" autosave="off"  onkeypress="return angka(event)"/>	
+									</td>
+									<td colspan="2">
+										
 							<label>Nama</label>
 							<input type="text" name="hnama" id="hnama" class="nama form-control" style="text-transform:uppercase;" disabled required/>
 							<input type="hidden" name="nama" id="nama" class="form-control" style="text-transform:uppercase;" required />
+									</td>
+								</tr>
+								<tr>
+									<td colspan="3">
+										
 							<label>Zona</label>
 							<select name="zona" id="zona" class="form-control" required>
 								<option value="">--Select--</option>
@@ -834,17 +1025,35 @@ error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 								<option value="Warehouse">Warehouse</option>
 								<option value="Chift">Chiftdel</option>
 							</select>
-						</div>
-						<div class="modal-footer">
-							<div class="col-xs-12">
-								<br>
-								<button type="submit" name="action" id="actionbtlr" class="btn btn-success treload" value="btlr"/>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="3">
+										<label>Keterangan</label><br>
+										<textarea name="keteranganbtlr" id="keteranganbtlr" style="width: 340px; height: 50px"></textarea>
+									</td>
+								</tr>
+								<tr><td><br></td></tr>
+								<tr>
+									<td><br></td>
+									<td style="text-align: right;">
+										<button type="submit" name="action" id="actionbtlr" class="btn btn-success treload" value="btlr"/>
 								Simpan
 								</button>
+									</td>
+								</tr>
+							</table>
+						</div>
+						<!-- <div class="modal-footer"> -->
+							<!-- <div class="col-xs-8"> -->
+								<br>
+								<!-- <button type="submit" name="action" id="actionbtlr" class="btn btn-success treload" value="btlr"/>
+								Simpan
+								</button> -->
 								<input type="hidden" name="jenis" id="jenis" />
 								<input type="hidden" name="operation" id="operation9" />
-							</div>
-						</div>
+							<!-- </div> -->
+						<!-- </div> -->
 					</div>
 				</form>
 			</div>
